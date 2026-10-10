@@ -3,18 +3,18 @@ const normalize = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]
 const shuffle = a => { const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b; };
 let teams=[],round=[],index=0,score=0,streak=0,answered=false,missed=[],options=[],activeMode='choice',activeConference='All',isPractice=false;
 let roundSeed=0,roundChallenge=false,opponentScore=null,pendingChallenge=null;
-let record={seen:[],attempts:0,correct:0,best:0};
-try {const r=JSON.parse(localStorage.getItem('logo-league-record-v1'));if(r&&Array.isArray(r.seen)&&Number.isFinite(r.attempts)&&Number.isFinite(r.correct)&&Number.isFinite(r.best))record=r;}catch{}
+let record={seen:[],nicknames:[],attempts:0,correct:0,best:0};
+try {const r=JSON.parse(localStorage.getItem('logo-league-record-v1'));if(r&&Array.isArray(r.seen)&&Number.isFinite(r.attempts)&&Number.isFinite(r.correct)&&Number.isFinite(r.best))record={...r,nicknames:Array.isArray(r.nicknames)?r.nicknames:[]};}catch{}
 function save(){try{localStorage.setItem('logo-league-record-v1',JSON.stringify(record));}catch{}updateStats();}
-function updateStats(){$('mastered').innerHTML=`${new Set(record.seen).size}<span>/138</span>`;$('accuracy').textContent=record.attempts?Math.round(record.correct/record.attempts*100)+'%':'—';$('bestStreak').textContent=record.best;}
+function updateStats(){$('mastered').innerHTML=`${new Set(activeMode==='nickname'?record.nicknames:record.seen).size}<span>/138</span>`;$('masteredLabel').textContent=activeMode==='nickname'?'Unique nicknames recalled':'Unique logos identified';$('accuracy').textContent=record.attempts?Math.round(record.correct/record.attempts*100)+'%':'—';$('bestStreak').textContent=record.best;}
 function startRound(pool=null,challenge=null){
  activeConference=$('conference').value;activeMode=challenge?challenge.m:$('mode').value;isPractice=!!pool;
  roundChallenge=!pool&&(!!challenge||$('challengeMode').checked);opponentScore=challenge?challenge.score:null;roundSeed=challenge?challenge.s:crypto.getRandomValues(new Uint32Array(1))[0];pendingChallenge=null;
  const field=pool||teams.filter(t=>activeConference==='All'||t.conference===activeConference);
  const amount=pool?field.length:$('length').value==='all'?field.length:Math.min(Number($('length').value),field.length);
  round=challenge?challenge.t.map(id=>teams.find(t=>t.id===id)):shuffle(field).slice(0,amount);index=score=streak=0;missed=[];
- $('roundLabel').textContent=(isPractice?'MISSED LOGOS':roundChallenge?'FRIEND CHALLENGE':activeConference==='All'?'ALL FBS':activeConference.toUpperCase())+' · '+(isPractice?'PRACTICE':round.length+' LOGO'+(round.length===1?'':'S'));
- $('challengeInvitation').hidden=true;$('questionView').hidden=false;$('resultsView').hidden=true;showView('play');renderQuestion();
+ $('roundLabel').textContent=(isPractice?(activeMode==='nickname'?'MISSED NICKNAMES':'MISSED LOGOS'):roundChallenge?'FRIEND CHALLENGE':activeConference==='All'?'ALL FBS':activeConference.toUpperCase())+' · '+(isPractice?'PRACTICE':round.length+(activeMode==='nickname'?' NICKNAME':' LOGO')+(round.length===1?'':'S'));
+ $('challengeInvitation').hidden=true;$('questionView').hidden=false;$('resultsView').hidden=true;showView('play');updateStats();renderQuestion();
 }
 function seededRandom(seed){let state=seed>>>0;return ()=>{state=(state+0x6D2B79F5)>>>0;let v=state;v=Math.imul(v^(v>>>15),v|1);v^=v+Math.imul(v^(v>>>7),v|61);return ((v^(v>>>14))>>>0)/4294967296;};}
 function seededShuffle(values,random){const result=[...values];for(let i=result.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[result[i],result[j]]=[result[j],result[i]];}return result;}
@@ -29,14 +29,15 @@ function decodeChallenge(hash,field){
  const token=new URLSearchParams(hash.replace(/^#/, '')).get('challenge');if(!token)return null;
  if(token.length>5000||!/^[A-Za-z0-9_-]+$/.test(token))throw Error('Invalid challenge');
  const payload=JSON.parse(atob(token.replace(/-/g,'+').replace(/_/g,'/')));const ids=new Set(field.map(t=>t.id));
- if(payload.v!==1||!Array.isArray(payload.t)||!payload.t.length||payload.t.length>field.length||new Set(payload.t).size!==payload.t.length||payload.t.some(id=>typeof id!=='string'||!ids.has(id))||!['choice','type'].includes(payload.m)||!Number.isInteger(payload.s)||payload.s<0||payload.s>4294967295||!Number.isInteger(payload.score)||payload.score<0||payload.score>payload.t.length)throw Error('Invalid challenge');
+ if(payload.v!==1||!Array.isArray(payload.t)||!payload.t.length||payload.t.length>field.length||new Set(payload.t).size!==payload.t.length||payload.t.some(id=>typeof id!=='string'||!ids.has(id))||!['choice','type','nickname'].includes(payload.m)||!Number.isInteger(payload.s)||payload.s<0||payload.s>4294967295||!Number.isInteger(payload.score)||payload.score<0||payload.score>payload.t.length)throw Error('Invalid challenge');
  return {v:1,t:payload.t,m:payload.m,s:payload.s,score:payload.score};
 }
 function challengeURL(base,payload){const url=new URL(base);url.search='';url.hash='challenge='+encodeChallenge(payload);return url.href;}
 function canShareChallenge(base){const url=new URL(base);return ['https:','http:'].includes(url.protocol)&&!['localhost','127.0.0.1','::1','[::1]'].includes(url.hostname);}
+function modeLabel(mode){return {choice:'Logo → multiple choice',type:'Logo → type the team',nickname:'School → nickname'}[mode];}
 function showChallengeInvitation(challenge){
  pendingChallenge=challenge;$('questionView').hidden=true;$('resultsView').hidden=true;$('challengeInvitation').hidden=false;$('roundLabel').textContent='FRIEND CHALLENGE';
- $('challengeInvitation').innerHTML=`<div class="eyebrow">SAME QUIZ. YOUR TURN.</div><h2>You’ve been challenged.</h2><div class="target-score">${challenge.score}<span> / ${challenge.t.length}</span></div><p>Your friend’s score to beat.<br>${challenge.t.length} logo${challenge.t.length===1?'':'s'} · ${challenge.m==='choice'?'Multiple choice':'Type the team'}<br>Same teams. Same order. Same answer options.</p><button class="primary" id="acceptChallenge">Take the challenge →</button>`;
+ $('challengeInvitation').innerHTML=`<div class="eyebrow">SAME QUIZ. YOUR TURN.</div><h2>You’ve been challenged.</h2><div class="target-score">${challenge.score}<span> / ${challenge.t.length}</span></div><p>Your friend’s score to beat.<br>${challenge.t.length} ${challenge.m==='nickname'?'school':'logo'}${challenge.t.length===1?'':'s'} · ${modeLabel(challenge.m)}<br>Same teams. Same order. Same game mode.</p><button class="primary" id="acceptChallenge">Take the challenge →</button>`;
  $('acceptChallenge').addEventListener('click',()=>startRound(null,challenge));$('mode').value=challenge.m;$('challengeMode').checked=true;updatePlayStyle();
 }
 function handleChallengeURL(){try{const challenge=decodeChallenge(location.hash,teams);if(challenge){showChallengeInvitation(challenge);return true;}}catch{ $('challengeNote').hidden=false;$('challengeNote').textContent='That challenge link is invalid. You can start a new round instead.';}return false;}
@@ -45,7 +46,7 @@ function addChallengeResult(){
  const section=document.createElement('section');section.className='challenge-result';
  if(opponentScore!==null){const heading=document.createElement('h3');heading.textContent=score>opponentScore?'You won by '+(score-opponentScore)+'!':score===opponentScore?'It’s a tie!':'Your friend won by '+(opponentScore-score)+'.';const summary=document.createElement('p');summary.textContent='Your score: '+score+' · Your friend: '+opponentScore;section.append(heading,summary);}
  const title=document.createElement('h3');title.textContent=opponentScore!==null?'Send this round back':'Challenge your friend';section.append(title);
- const message=document.createElement('p');message.textContent='This link gives your friend the same teams, order, answer style, and answer options, with your score to beat.';section.append(message);
+ const message=document.createElement('p');message.textContent='This link gives your friend the same teams, order, and game mode'+(activeMode==='choice'?', including the same answer options':'')+', with your score to beat.';section.append(message);
  if(canShareChallenge(location.href)){
   const payload={v:1,t:round.map(t=>t.id),m:activeMode,s:roundSeed,score};const url=challengeURL(location.href,payload);
   const label=document.createElement('label');label.textContent='Your challenge link';label.htmlFor='challengeLink';
@@ -59,20 +60,24 @@ function addChallengeResult(){
 }
 function renderQuestion(){
  answered=false;hideSuggestions();const t=round[index];$('questionNumber').textContent=String(index+1).padStart(2,'0');$('total').textContent=' / '+round.length;$('score').textContent=score;$('streak').textContent=streak;$('progressBar').style.width=(index/round.length*100)+'%';
- $('logo').src=t.logo;$('logo').alt='Mystery college football team logo';$('feedback').hidden=true;$('next').hidden=true;$('skip').hidden=false;$('keyboardHint').hidden=activeMode!=='choice';$('choices').hidden=activeMode!=='choice';$('typeForm').hidden=activeMode!=='type';$('typedAnswer').value='';$('typedAnswer').disabled=false;$('typeForm').querySelector('button').disabled=false;
- $('answerHelp').textContent=activeMode==='choice'?'Pick the team that owns this mark.':'Type the school name. Select a suggestion to guess, or type a name and press Check.';
+ $('logo').src=t.logo;$('logo').alt='Mystery college football team logo';$('feedback').hidden=true;$('next').hidden=true;$('skip').hidden=false;$('keyboardHint').hidden=activeMode!=='choice';$('choices').hidden=activeMode!=='choice';$('typeForm').hidden=activeMode==='choice';$('typedAnswer').value='';$('typedAnswer').disabled=false;$('typeForm').querySelector('button').disabled=false;
+ const nicknameMode=activeMode==='nickname';$('logo').hidden=nicknameMode;$('schoolPrompt').hidden=!nicknameMode;$('schoolName').textContent=t.school;
+ $('skip').innerHTML=(nicknameMode?'Skip this school':'Skip this logo')+' <span>→</span>';$('questionLabel').textContent=nicknameMode?'QUESTION':'LOGO';$('stageCaption').textContent=nicknameMode?'THE SCHOOL. THE NAME. THE TRADITION.':'THE MARK. THE TRADITION. THE TEAM.';
+ $('quizPrompt').textContent=nicknameMode?'What’s their nickname?':'Whose logo is this?';$('typedLabel').textContent=nicknameMode?'Team nickname':'Team name';$('typedAnswer').placeholder=nicknameMode?'Enter the nickname…':'Enter the school name…';
+ $('heroTitle').innerHTML=nicknameMode?'Know the school.<br> Name the <em>nickname.</em>':'Know the logo.<br> Name the <em>team.</em>';
+ $('answerHelp').textContent=nicknameMode?'Type the team’s nickname, then press Check.':activeMode==='choice'?'Pick the team that owns this mark.':'Type the school name. Select a suggestion to guess, or type a name and press Check.';
  options=questionOptions(t,index,roundSeed,teams);$('choices').replaceChildren();
  options.forEach((x,i)=>{const b=document.createElement('button');b.className='answer';b.innerHTML=`<span class="key">${i+1}</span><span>${x.school}</span>`;b.addEventListener('click',()=>answer(x.id===t.id,x.id));$('choices').append(b);});
- $('next').textContent=index===round.length-1?'See my results →':'Next logo →';
+ $('next').textContent=index===round.length-1?'See my results →':activeMode==='nickname'?'Next school →':'Next logo →';
  if(round[index+1]){const im=new Image();im.src=round[index+1].logo;}
 }
 function answer(correct,selected=null,skipped=false){
  if(answered)return;answered=true;hideSuggestions();const t=round[index];
- record.attempts++;if(correct){score++;streak++;record.correct++;if(!record.seen.includes(t.id))record.seen.push(t.id);record.best=Math.max(record.best,streak);}else{streak=0;missed.push(t);}
+ record.attempts++;if(correct){score++;streak++;record.correct++;const known=activeMode==='nickname'?record.nicknames:record.seen;if(!known.includes(t.id))known.push(t.id);record.best=Math.max(record.best,streak);}else{streak=0;missed.push(t);}
  save();$('score').textContent=score;$('streak').textContent=streak;$('progressBar').style.width=((index+1)/round.length*100)+'%';$('logo').alt=t.school+' '+t.nickname+' logo';
  [...$('choices').children].forEach((b,i)=>{b.disabled=true;if(options[i].id===t.id){b.classList.add('correct');b.querySelector('.key').textContent='✓';}else if(options[i].id===selected){b.classList.add('wrong');b.querySelector('.key').textContent='×';}});
  $('typedAnswer').disabled=true;$('typeForm').querySelector('button').disabled=true;
- $('feedback').className='feedback'+(correct?'':' miss');$('feedback').innerHTML=`<strong>${correct?'That’s right!':skipped?'Logo revealed.':'Not this time.'} ${t.school} ${t.nickname}.</strong><small>${t.conference} · ${correct?'One more for the record book.':'You can practice this logo after the round.'}</small>`;
+ $('feedback').className='feedback'+(correct?'':' miss');$('feedback').innerHTML=`<strong>${correct?'That’s right!':skipped?(activeMode==='nickname'?'Nickname revealed.':'Logo revealed.'):'Not this time.'} ${t.school} ${t.nickname}.</strong><small>${t.conference} · ${correct?'One more for the record book.':activeMode==='nickname'?'You can practice this nickname after the round.':'You can practice this logo after the round.'}</small>`;
  $('feedback').hidden=false;$('next').hidden=false;$('skip').hidden=true;$('keyboardHint').hidden=true;$('next').focus({preventScroll:true});
 }
 const aliases={
@@ -632,7 +637,13 @@ const aliases={
   ]
 };
 function teamNames(t){return [t.school,t.school+' '+t.nickname,...(aliases[t.id]||[])];}
-function typedMatches(value,t){const v=normalize(value);return teamNames(t).some(name=>normalize(name)===v);}
+const nicknameAliases={
+ '99':['Bayou Bengals'], '87':['Irish'], '356':['Illini'], '333':['Tide'],
+ '309':['Cajuns','Ragin Cajuns'], '62':['Warriors'], '48':['Fightin Blue Hens'],
+ '2426':['Middies'], '57':['Gators'], '30':['Trojans']
+};
+function nicknameMatches(value,t){const v=normalize(value);return [t.nickname,t.school+' '+t.nickname,...(nicknameAliases[t.id]||[])].some(name=>normalize(name)===v);}
+function typedMatches(value,t){if(activeMode==='nickname')return nicknameMatches(value,t);const v=normalize(value);return teamNames(t).some(name=>normalize(name)===v);}
 function hideSuggestions(){
  $('teamSuggestions').hidden=true;$('suggestionList').replaceChildren();$('typedAnswer').setAttribute('aria-expanded','false');$('suggestionStatus').textContent='';
 }
@@ -654,10 +665,10 @@ function updateSuggestions(){
  });
  $('teamSuggestions').hidden=false;$('typedAnswer').setAttribute('aria-expanded','true');$('suggestionStatus').textContent=matches.length+' matching team'+(matches.length===1?'':'s')+'. Use Tab or the down arrow to select a match.';
 }
-function next(){if(!answered)return;index++;if(index===round.length)finish();else{renderQuestion();if(activeMode==='type')$('typedAnswer').focus({preventScroll:true});else $('choices').firstChild.focus({preventScroll:true});}}
+function next(){if(!answered)return;index++;if(index===round.length)finish();else{renderQuestion();if(activeMode!=='choice')$('typedAnswer').focus({preventScroll:true});else $('choices').firstChild.focus({preventScroll:true});}}
 function finish(){
  $('questionView').hidden=true;$('resultsView').hidden=false;const pct=Math.round(score/round.length*100);
- $('resultsView').innerHTML=`<div class="eyebrow">${isPractice?'PRACTICE COMPLETE':'FINAL WHISTLE'}</div><div class="result-score">${score}<span> / ${round.length}</span></div><h2>${pct===100?'A perfect game.':pct>=80?'You know ball.':pct>=50?'A solid starting lineup.':'Every fan starts somewhere.'}</h2><p>${pct}% accuracy this round.<br>${missed.length?missed.length+' logo'+(missed.length===1?'':'s')+' to get to know a little better.':'You identified every logo. Ready for another field?'}</p>${missed.length?'<div class="missed-list">'+missed.map(t=>`<div class="missed-item"><img src="${t.logo}" alt=""><span>${t.school} ${t.nickname}<small>${t.conference}</small></span></div>`).join('')+'</div><button class="primary" id="retry">Practice missed logos →</button>':''}<button class="primary" id="again">Play another round →</button>`;
+ $('resultsView').innerHTML=`<div class="eyebrow">${isPractice?'PRACTICE COMPLETE':'FINAL WHISTLE'}</div><div class="result-score">${score}<span> / ${round.length}</span></div><h2>${pct===100?'A perfect game.':pct>=80?'You know ball.':pct>=50?'A solid starting lineup.':'Every fan starts somewhere.'}</h2><p>${pct}% accuracy this round.<br>${missed.length?missed.length+(activeMode==='nickname'?' nickname':' logo')+(missed.length===1?'':'s')+' to get to know a little better.':activeMode==='nickname'?'You knew every nickname. Ready for another field?':'You identified every logo. Ready for another field?'}</p>${missed.length?'<div class="missed-list">'+missed.map(t=>`<div class="missed-item"><img src="${t.logo}" alt=""><span>${t.school} ${t.nickname}<small>${t.conference}</small></span></div>`).join('')+'</div><button class="primary" id="retry">Practice missed '+(activeMode==='nickname'?'nicknames':'logos')+' →</button>':''}<button class="primary" id="again">Play another round →</button>`;
  if(roundChallenge)addChallengeResult();
  $('again').addEventListener('click',()=>startRound());if(missed.length)$('retry').addEventListener('click',()=>startRound([...missed]));$('resultsView').querySelector('button').focus({preventScroll:true});
 }
