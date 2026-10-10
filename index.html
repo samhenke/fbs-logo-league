@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#163f32">
-  <meta name="description" content="How well do you know college football? Quiz yourself on the logos and nicknames of all 138 FBS teams, or practice one conference at a time.">
+  <meta name="description" content="How well do you know college football? Quiz yourself on the logos, helmets, and nicknames of all 138 FBS teams, or practice one conference at a time.">
   <title>Logo League — FBS Football Quiz</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=helmets-1">
 </head>
 <body>
   <header class="header"><a href="#" class="brand" aria-label="Logo League home"><span class="brand-icon">◈</span> LOGO<span>LEAGUE</span></a><nav aria-label="Main navigation"><button class="nav active" id="playTab">Play the quiz</button><button class="nav" id="libraryTab">Team library <span>↗</span></button></nav><span class="season"><i></i> 2026 FBS SEASON</span></header>
@@ -16,7 +16,7 @@
           <fieldset class="play-style"><legend>Play style</legend><label><input type="radio" name="playStyle" id="soloMode" checked> Solo practice</label><label><input type="radio" name="playStyle" id="challengeMode"> Challenge a friend</label></fieldset>
           <p id="challengeNote" class="challenge-note" hidden>Take your round, then send your friend a link to the same quiz.</p>
           <label for="conference">Choose your field</label><select id="conference"><option value="All">All FBS conferences · 138 teams</option></select>
-          <div class="setup-row"><div><label for="length">Round length</label><select id="length"><option value="10">10 questions · Warm-up</option><option value="20" selected>20 questions · Game day</option><option value="all">All teams · Full field</option></select></div><div><label for="mode">Game mode</label><select id="mode"><option value="choice">Logo → multiple choice</option><option value="type">Logo → type the team</option><option value="nickname">School → nickname</option></select></div></div>
+          <div class="setup-row"><div><label for="length">Round length</label><select id="length"><option value="10">10 questions · Warm-up</option><option value="20" selected>20 questions · Game day</option><option value="all">All teams · Full field</option></select></div><div><label for="mode">Game mode</label><select id="mode"><option value="choice">Logo → multiple choice</option><option value="type">Logo → type the team</option><option value="nickname">School → nickname</option><option value="helmet">Helmet → school</option></select></div></div>
           <button class="primary" id="start">Start a new round <span>→</span></button><p class="setup-note">No timer. No repeats. Just college football.</p>
         </div>
         <div class="field-note"><span class="tiny-football">◈</span><span>Every corner of college football.<br><strong>All 10 conferences + independents.</strong></span></div>
@@ -32,8 +32,8 @@
     <section class="stats-strip" aria-label="Your lifetime stats"><div class="stats-title"><span class="eyebrow">YOUR RECORD BOOK</span><p>A little better every round.</p></div><div><strong id="mastered">0<span>/138</span></strong><span id="masteredLabel">Unique logos identified</span></div><div><strong id="accuracy">—</strong><span>Lifetime accuracy</span></div><div><strong id="bestStreak">0</strong><span>Best correct streak</span></div></section>
   </main>
   <footer><span class="brand-footer">LOGO LEAGUE <span>·</span> FOR THE LOVE OF THE GAME.</span><button id="about">About the field & credits ↗</button><span>Progress saved on this device.</span></footer>
-  <dialog id="aboutDialog"><button id="closeAbout" class="close" aria-label="Close">×</button><div class="eyebrow">THE PLAYBOOK</div><h2>All 138. All in.</h2><p>The quiz includes the 2026 FBS football field, including North Dakota State and Sacramento State, and reflects 2026 football conference membership.</p><p>Team data and logos are sourced from <a href="https://www.espn.com/college-football/teams" target="_blank" rel="noopener">ESPN</a>. Membership was checked against <a href="https://collegefootballdata.com/teams" target="_blank" rel="noopener">CollegeFootballData</a>. Team marks belong to their respective institutions. This is an independent fan quiz.</p><p>Scores and progress stay in your browser. Challenge links include the teams, answer style, and challenger’s score; your friend takes the same quiz. Anyone with a challenge link can play it. A skip counts as a missed answer. Retrying missed answers starts a separate practice round.</p></dialog>
+  <dialog id="aboutDialog"><button id="closeAbout" class="close" aria-label="Close">×</button><div class="eyebrow">THE PLAYBOOK</div><h2>All 138. All in.</h2><p>The quiz includes the 2026 FBS football field, including North Dakota State and Sacramento State, and reflects 2026 football conference membership.</p><p>Team data and logos are sourced from <a href="https://www.espn.com/college-football/teams" target="_blank" rel="noopener">ESPN</a>. Membership was checked against <a href="https://collegefootballdata.com/teams" target="_blank" rel="noopener">CollegeFootballData</a>. Helmet photographs: <a href="https://www.helmethistory.com/" target="_blank" rel="noopener">Helmet History</a>. Each school has one representative helmet design. Team marks belong to their respective institutions. This is an independent fan quiz.</p><p>Scores and progress stay in your browser. Challenge links include the teams, answer style, and challenger’s score; your friend takes the same quiz. Anyone with a challenge link can play it. A skip counts as a missed answer. Retrying missed answers starts a separate practice round.</p></dialog>
   <div id="loadingError" class="error" role="alert" hidden>Team data couldn't load. Please refresh to try again.</div>
-  <script src="app.js" defer></script>
+  <script src="app.js?v=helmets-1" defer></script>
 </body>
 </html>
