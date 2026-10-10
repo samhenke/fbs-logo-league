@@ -1,6 +1,6 @@
-# Logo League
+# Fansville Fan Quiz — Logo League
 
-A college football quiz covering all 138 FBS programs in the 2026 season.
+A Fansville-inspired college football quiz covering all 138 FBS programs in the 2026 season. Burgundy and cream styling, original football-town artwork, and a Dr Pepper football logo carry through the game, library, stats, and friend challenges.
 
 - Filter by conference and choose a 10-question, 20-question, or full-field round.
 - Play multiple choice or type a school name. Full school names, abbreviations, and alternate names are accepted.
@@ -22,3 +22,7 @@ Team logos and team data: ESPN. 2026 FBS membership: CollegeFootballData. Helmet
 Mascot references, checked exceptions, and naming notes are in `mascot-sources.json`. The dataset includes named costumed characters, live mascots, and widely recognized symbolic mascots. The Stanford Tree is unofficial; retired mascots are excluded.
 
 Team marks belong to their respective institutions. This is an independent fan quiz.
+
+## Theme assets
+
+The original Fansville town illustration was created with the built-in image-generation tool. The prompt and source of the Dr Pepper football logo are recorded in `theme-sources.json`. This is an unofficial fan project, not affiliated with Dr Pepper or Keurig Dr Pepper.

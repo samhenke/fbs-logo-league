@@ -1,0 +1,21 @@
+{
+  "theme": "Fansville Fan Quiz",
+  "artwork": {
+    "file": "assets/theme/fansville-town.jpg",
+    "creation": "Original illustration created with the built-in image-generation tool",
+    "prompt": "Use case: illustration-story. Asset type: wide panoramic hero background for a Fansville-themed college football trivia website. Create original polished cinematic illustrated concept art inspired by Dr Pepper's fictional Fansville football town. Landscape panoramic composition approx 3:1, warm nostalgic Americana, autumn Saturday afternoon golden sunlight. A charming brick Main Street with a red-and-cream diner, clapboard houses, burgundy football pennants, a football stadium with glowing floodlights in the distance, and a tall cream water tower bearing the exact single word 'FANSVILLE' in dark burgundy block lettering on the right half. Tasteful Dr Pepper burgundy #71152D, dark wine #330C18, warm cream #FFF4DD, warm muted red, subtle golden accents, trees with autumn foliage. Put the most interesting town buildings, water tower and stadium in the right two thirds; leave the left third softly atmospheric and less busy for readable website text placed separately in HTML. Premium textured hand-painted realism, crisp architectural details, welcoming and playful, lively small town sports atmosphere. No human close-ups, no celebrities or existing television actors. No UI, no buttons, no frames, no extra text or taglines, no watermarks. This is a new original illustration, not a recreation of a commercial screenshot.",
+    "original": "Original PNG preserved in outputs/fansville-town.png"
+  },
+  "drPepperLogo": {
+    "file": "assets/theme/dr-pepper-football.jpg",
+    "source": "https://news.keurigdrpepper.com/2026-09-04-Dr-Pepper-Gives-College-Football-Fans-a-Championship-Monument-of-Their-Own-with-the-First-Ever-Fan-Wall-of-Fame",
+    "image": "https://mmx.prnewswire.com/media/MS1982028/DP_Regular_Football.jpg?id=OA2930730"
+  },
+  "palette": {
+    "burgundy": "#74172e",
+    "darkWine": "#3d0d1b",
+    "cream": "#f7efdf",
+    "gold": "#c5a061"
+  },
+  "affiliation": "Independent fan project; not affiliated with Dr Pepper or Keurig Dr Pepper"
+}
