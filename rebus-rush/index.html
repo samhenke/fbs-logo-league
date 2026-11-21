@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#e9e4fa"><title>Rebus Rush · Visual word puzzles</title><meta name="description" content="Race the clock to solve picture-word puzzles. Play for one, two, or three minutes and challenge a friend.">
+<style>
+:root{--ink:#241e33;--bg:#ece7fa;--paper:#fffaf0;--hot:#a9342a;--mint:#c3e49a;--lav:#c9b6f3;--rule:#978ca9;--sans:'DM Sans',Arial,sans-serif;--serif:'DM Serif Text',Georgia,serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 var(--sans)}button,input,summary{font:inherit;color:inherit}button,summary{cursor:pointer}button{border:1.5px solid var(--ink);border-radius:6px;background:var(--paper);padding:9px 14px;font-weight:700}button:hover{background:#f6eacb}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #6c419f;outline-offset:3px}button:disabled{opacity:.5;cursor:default}p{margin:0 0 1em}[hidden]{display:none!important}.wrap{width:min(100% - 44px,1000px);margin:auto}header{height:75px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--ink)}.brand{display:flex;align-items:center;gap:10px;font:bold 1.5rem var(--serif);letter-spacing:-.06em}.brandmark{background:var(--mint);border:2px solid var(--ink);width:33px;height:33px;display:grid;place-items:center;font:bold italic 1.65rem/.9 var(--serif);transform:rotate(-8deg);box-shadow:2px 2px var(--ink);border-radius:5px}.help,.plain{border:0;background:none;text-decoration:underline;text-underline-offset:4px;font-size:.95rem}.help:hover,.plain:hover{background:transparent;color:var(--hot)}.hero{display:grid;grid-template-columns:1fr 1fr;gap:7%;align-items:center;min-height:480px;padding:48px 3% 41px}.hero h1,.results h1{font:bold clamp(5rem,9.8vw,7.6rem)/.86 var(--serif);letter-spacing:-.087em;margin:0 0 21px}.hero h1 em,.results h1 em{color:var(--hot);padding-right:.08em}.hero p{font-size:1.14rem;max-width:350px;margin-bottom:21px}.durlabel{display:block;font-size:.93rem;font-weight:700;margin-bottom:7px}.dur{display:flex;gap:6px;margin:0 0 13px}.dur button[aria-pressed=true]{background:var(--ink);color:white}.play,.check{background:var(--mint);box-shadow:3px 3px var(--ink);padding:12px 22px}.play:hover,.check:hover{background:#acd777}.practice{position:relative;transform:rotate(2deg)}.sheet{border:2px solid var(--ink);border-radius:10px;box-shadow:5px 6px var(--ink);background-color:var(--paper);background-image:linear-gradient(#92836112 1px,transparent 1px),linear-gradient(90deg,#92836112 1px,transparent 1px);background-size:22px 22px;overflow:hidden}.caption{border-bottom:1.5px solid var(--ink);background:#f6ce73;padding:8px 16px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:8px}.practice:before{content:'';position:absolute;top:-15px;left:44%;width:68px;height:26px;background:#baa6dfc9;border:1px solid #977db5;transform:rotate(-7deg);z-index:2}.paperfoot{border-top:1px dashed var(--rule);padding:10px 16px;min-height:50px;display:flex;align-items:center;justify-content:center}.paperfoot button{padding:4px}.paperfoot p{font-size:1rem;margin:0;text-align:center}.practice .art{min-height:205px}.art{display:flex;align-items:center;justify-content:center;min-height:205px;padding:20px 12px;overflow:hidden;font-family:'Archivo Black','Arial Black',Arial,sans-serif;font-weight:900;line-height:1.12;letter-spacing:.015em;font-size:clamp(1.6rem,4.4vw,3rem);text-align:center}.stack{display:grid;place-items:center;gap:.25em}.stack.lined span:first-child{padding-bottom:.14em;border-bottom:3px solid}.seq{display:flex;align-items:center;justify-content:center;gap:.36em;flex-wrap:wrap}.chip,.inside{display:inline-grid;place-items:center;border:3px solid;border-radius:4px;padding:.22em .4em}.inside{min-width:3em;min-height:1.7em}.square{width:1.65em;height:1.65em;padding:.1em}.break{display:flex;align-items:center;justify-content:center;gap:1.1em}.break span:last-child{transform:translateY(.22em) rotate(8deg)}.split{display:flex;gap:.24em;align-items:center}.split small{font-size:.56em;color:var(--hot);border-bottom:2px dotted}.borderlabel{border:3px solid;padding:.53em 1em .6em;position:relative;border-radius:6px}.borderlabel small{display:block;font:700 .32em/1 var(--sans);letter-spacing:.1em;margin-bottom:1em}.tilt{display:block;transform:rotate(-22deg)}.smallword{font-size:.43em}.bigword{font-size:1.65em}.stretch{display:block;transform:scaleX(1.65)}.tall{display:block;transform:scaleY(2)}.dots{font-size:.75em;letter-spacing:.04em}.needle{font-size:.8em;line-height:1.3;letter-spacing:.07em}.needle b,.digit{color:var(--hot)}.ring{display:grid;grid-template-columns:repeat(3,1fr);gap:.3em;align-items:center;font-size:.6em}.ring span:first-child,.ring span:last-child{grid-column:1/-1}.ring i{width:1.8em;height:1.8em;border:2px dashed #78688a;border-radius:50%}.pan{border:4px solid;border-radius:15px 15px 45px 45px;padding:.35em;position:relative;margin-right:1.2em}.pan:after{position:absolute;content:'';width:1.15em;height:.14em;background:var(--ink);right:-1.1em;top:.32em;transform:rotate(-12deg)}.pod{border:3px solid;border-radius:75% 15% 75% 15%;padding:.35em 1em;display:flex;gap:.45em}.wordbox{display:inline-block;border:3px solid;width:2.4em;height:1.65em}.readlines{padding:.14em .5em;border-block:4px solid}.fork{font-family:Apple Color Emoji,Segoe UI Emoji,sans-serif}.formrow,.actions,.statusrow,.scorebar{display:flex;gap:10px;align-items:center}.arena,.results{max-width:690px;margin:29px auto 44px}.scorebar{justify-content:space-between;font-weight:700;margin:0 0 13px}.timer{border:1.5px solid var(--ink);border-radius:25px;background:var(--paper);padding:4px 13px;font-variant-numeric:tabular-nums}.timer.low{background:#ffcebc;color:#7f211e}.formrow{margin-top:19px}.formrow input,.shareinput{font-size:1.05rem;background:#fffdf7;border:1.5px solid var(--ink);border-radius:6px;padding:12px;width:100%;min-width:0}.formrow label{flex:1}.check{white-space:nowrap}.statusrow{justify-content:space-between;align-items:baseline;margin:12px 0}.statusrow button{white-space:nowrap}.answerlabel{display:block;font-weight:700;font-size:.96rem;margin:20px 0 -14px}.msg{font-size:.98rem;font-weight:650}.msg.bad{color:#963126}.minor{font-size:.95rem;color:#544861}.end{display:block;margin:14px 0 0 auto}.results h1{font-size:clamp(3.2rem,7vw,5rem)}.score{font:bold 2.8rem/1.1 var(--serif);letter-spacing:-.04em;margin:10px 0}.resultcard{margin:18px 0;padding:18px 20px;background:var(--paper);border:1.5px solid var(--ink);border-radius:8px}.resultcard h2{margin:0 0 7px;font: bold 1.5rem var(--serif)}.resultcard p{margin:5px 0}.shareinput{margin:8px 0}.review{border-bottom:1px solid var(--rule);padding:12px 0}.review summary{font-weight:700}.review .art{background:var(--paper);min-height:122px;font-size:1.7rem;margin:10px 0 7px;border-radius:6px}.review p{margin:0}.review small{font-weight:500;color:#60546e}.actions{flex-wrap:wrap}.alert{background:#ffdeae;padding:10px;border-radius:5px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}dialog{border:2px solid var(--ink);color:var(--ink);background:var(--paper);border-radius:9px;box-shadow:4px 5px var(--ink);padding:23px;max-width:min(430px,90vw)}dialog h2{font:bold 1.8rem var(--serif);margin:0 0 9px}dialog::backdrop{background:#21172e65}footer{border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;color:#584a68;font-size:.9rem}footer a{color:inherit}h1:focus{outline:0}
+@media(max-width:650px){.wrap{width:calc(100% - 32px)}header{height:61px}.hero{padding:28px 0 28px;gap:25px;grid-template-columns:1fr}.hero h1{font-size:4.4rem;margin:0 0 12px}.hero h1 br{display:none}.hero h1 em{margin-left:.04em}.hero p{max-width:none;font-size:1.03rem;margin-bottom:13px}.practice{width:min(100% - 18px,410px);margin:8px auto 0;transform:rotate(1deg)}.practice .art{min-height:120px}.arena{margin-top:20px}.art{min-height:185px}.statusrow{gap:6px}.hero .play{min-width:165px}.formrow .check{padding-inline:14px}.sheet{box-shadow:3px 4px var(--ink)}.help{padding-right:0}}
+</style></head><body>
+<header class="wrap"><div class="brand"><span class="brandmark" aria-hidden="true">R</span>Rebus Rush</div><button id="help" class="help">How to play</button></header>
+<main class="wrap" id="main"></main>
+<footer class="wrap"><span>Rebus Rush</span><a href="../pecking-order/">Play Pecking Order</a></footer>
+<dialog id="rules"><h2>How to play</h2><p>A rebus uses the size, sound, spelling, or position of words to suggest a familiar phrase. Say what you see out loud.</p><p>Type your guess and press Enter. Each solve earns one point. You can try again or pass and return to that puzzle later. The clock keeps running.</p><button id="gotit">Got it</button></dialog>
+<script>
+'use strict';
+const D=document, main=D.getElementById('main'), el=id=>D.getElementById(id);
+const stack=(...w)=>'<div class="stack">'+w.map(x=>'<span>'+x+'</span>').join('')+'</div>';
+const seq=(...w)=>'<div class="seq">'+w.map(x=>'<span>'+x+'</span>').join('')+'</div>';
+const broken=(a,b)=>'<div class="break"><span>'+a+'</span><span>'+b+'</span></div>';
+const inset=(a,x,b)=>'<div class="split"><span>'+a+'</span><small>'+x+'</small><span>'+b+'</span></div>';
+const room=(name,word)=>'<div class="borderlabel"><small>'+name+'</small>'+word+'</div>';
+const styled=(c,w)=>'<span class="'+c+'">'+w+'</span>';
+const box=w=>styled('inside',w);
+const puzzles=[];
+function puzzle(id,answer,art,description,explanation,aliases=[]){puzzles.push({id,answer,art,description,explanation,aliases});}
+// Each ID is permanent because challenge links refer to it.
+puzzle('board','Man overboard',stack('MAN','BOARD'),'MAN sits directly above BOARD.','MAN is over BOARD.',['man over board']);
+puzzle('mind','Mind over matter',stack('MIND','MATTER'),'MIND sits above MATTER.','Read the words with their position: MIND over MATTER.');
+puzzle('bridge','Water under the bridge',stack('BRIDGE','WATER'),'BRIDGE sits above WATER.','The WATER is under the BRIDGE.',['water under a bridge']);
+puzzle('weather','Under the weather',stack('WEATHER','ME'),'WEATHER sits over ME.','The speaker is under the word WEATHER.',['I am under the weather','feeling under the weather',"I’m under the weather"]);
+puzzle('stand','I understand',stack('STAND','I'),'The letter I sits below STAND.','Read from the bottom: I, under STAND.',['understand']);
+puzzle('lines','Read between the lines',styled('readlines','READ'),'READ sits between two horizontal lines.','The word READ is literally between the lines.',['reading between the lines']);
+puzzle('belt','Hit below the belt',stack('BELT','HIT'),'HIT is below BELT.','The HIT has landed below the BELT.',['hitting below the belt','below the belt']);
+puzzle('side','Side by side',seq('SIDE','SIDE'),'Two identical copies of SIDE sit next to each other.','One SIDE is right by the other SIDE.');
+puzzle('repeat','Repeat after me',seq('ME','REPEAT'),'From left to right: ME, then REPEAT.','REPEAT comes after ME.');
+puzzle('just','Just between you and me',seq('YOU','JUST','ME'),'A row reads YOU, JUST, ME.','JUST is between YOU and ME.',['just between me and you','between you and me']);
+puzzle('glance','A backward glance','ECNALG','The letters E C N A L G appear in a row.','Read GLANCE backward.',['backwards glance','a backwards glance','glance backwards','glance back']);
+puzzle('story','Backstory','YROTS','The letters Y R O T S appear in a row.','STORY is written back to front.',['backward story','backwards story','story backwards']);
+puzzle('step','A step back','PETS','The letters P E T S appear in a row.','Turn the letters around and PETS becomes STEP.',['backstep','step backwards','take a step back','step backward','backwards step','backward step']);
+puzzle('decision','Split decision',broken('DECI','SION'),'DECI and SION are separated and tilted apart.','The word DECISION has been split in two.',['a divided decision','broken decision']);
+puzzle('promise','Broken promise',broken('PRO','MISE'),'PRO and MISE are separated, with one piece tilted.','The two pieces used to make one PROMISE.',['break a promise','breaking a promise','split promise']);
+puzzle('heart','Broken heart',broken('HE','ART'),'HE and ART are separated, with one piece tilted.','The word HEART is broken.',['heartbreak','a broken heart','breaking heart']);
+puzzle('road','A fork in the road',inset('RO','<span class="fork">🍴</span>','AD'),'A fork and knife appear between RO and AD.','A fork sits inside the word ROAD.',['fork in a road']);
+puzzle('outside','Think outside the box',seq(styled('wordbox',''),'THINK'),'An empty square sits beside the word THINK.','THINK is outside the box.',['thinking outside the box','think outside of the box','thinking outside of the box']);
+puzzle('jack','Jack in the box',box('JACK'),'JACK is inside a rectangular box.','Put JACK in a box and you have the spring-loaded toy.',['jack in a box','jack in box']);
+puzzle('elephant','Elephant in the room',room('ROOM','ELEPHANT'),'A rectangle labeled ROOM encloses ELEPHANT.','The ELEPHANT is in the ROOM.',['elephant in a room']);
+puzzle('bull','Bull in a china shop',room('CHINA SHOP','BULL'),'A box labeled CHINA SHOP contains BULL.','The BULL has found its way into the CHINA SHOP.',['bull in the china shop','like a bull in a china shop']);
+puzzle('million','One in a million',inset('MILL','1','ION'),'The numeral 1 sits between MILL and ION.','There is a single 1 inside MILLION.',['1 in a million','one in one million']);
+puzzle('trouble','Trouble in paradise',inset('PARA','TROUBLE','DISE'),'TROUBLE sits inside PARADISE, between PARA and DISE.','Something has put TROUBLE right in the middle of PARADISE.');
+puzzle('foot','One foot in the grave',inset('GR','FOOT','AVE'),'FOOT sits between GR and AVE.','One FOOT is already in GRAVE.',['a foot in the grave','foot in the grave','one foot in a grave']);
+puzzle('instance','For instance',inset('ST','4','ANCE'),'The digit 4 splits STANCE into ST and ANCE.','Say “four in stance” aloud.',['four in stance']);
+puzzle('sand','Sandbox',box('SAND'),'SAND is enclosed in a rectangular box.','It is a box of SAND.',['box of sand','sand in a box','sand in the box']);
+puzzle('eggs','Scrambled eggs','GEGS','The letters G E G S appear in that order.','Unscramble GEGS to get EGGS.',['mixed eggs']);
+puzzle('order','Out of order','ODRER','The letters O D R E R appear in that order.','They spell ORDER with the letters out of order.',['order out of order','mixed up order']);
+puzzle('safety','Safety in numbers',stack('3　8　4','7　SAFETY　2','6　1　9'),'SAFETY is surrounded by digits.','Look for SAFETY among the numbers.');
+puzzle('pod','Two peas in a pod','<div class="pod"><span>P</span><span>P</span></div>','A pod-shaped outline holds two letter Ps.','Both Ps (peas) share one pod.',['2 peas in a pod','like two peas in a pod','peas in a pod']);
+puzzle('pan','A flash in the pan',styled('pan','FLASH'),'The word FLASH sits inside a drawing of a pan.','There is a FLASH in the pan.',['flash in a pan']);
+puzzle('small','Small talk',styled('smallword','TALK'),'TALK is printed in unusually small type.','Even the word TALK is small.',['little talk']);
+puzzle('big','Big deal',styled('bigword','DEAL'),'DEAL nearly fills the card in oversized letters.','That is a particularly big DEAL.',['huge deal']);
+puzzle('tall','Tall tale',styled('tall','TALE'),'The letters of TALE are stretched vertically.','The TALE is unusually tall.');
+puzzle('shot','Long shot',styled('stretch','SHOT'),'SHOT is stretched horizontally.','Stretching SHOT makes it a long one.');
+puzzle('battle','An uphill battle',styled('tilt','BATTLE'),'BATTLE tilts upward from left to right.','BATTLE is going uphill.',['uphill struggle']);
+puzzle('time','Time after time',seq('TIME','TIME'),'TIME appears twice in a row.','The second TIME comes after the first.',['time and time again','double time','time again']);
+puzzle('eye','Eye to eye',seq('EYE','2','EYE'),'A digit 2 sits between two copies of EYE.','Say each part aloud: EYE, two, EYE.',['see eye to eye','seeing eye to eye','eye 2 eye']);
+puzzle('forgive','Forgive and forget',stack('GIVE　GIVE','GIVE　GIVE','＋','GET　GET','GET　GET'),'Four copies of GIVE, a plus sign, then four copies of GET.','Four GIVE and four GET sound like “forgive and forget.”');
+puzzle('history','History repeats itself',stack('HISTORY','HISTORY','HISTORY'),'HISTORY appears on three successive lines.','HISTORY keeps repeating itself.',['history repeating itself','history repeated','history repeats']);
+puzzle('needle','A needle in a haystack','<div class="needle">HAY<br>HAY HAY<br>HAY <b>NEEDLE</b> HAY<br>HAY HAY HAY HAY</div>','Copies of HAY form a stack with one NEEDLE tucked into it.','Find the single NEEDLE in the stack of HAY.',['needle in the haystack']);
+puzzle('friends','Circle of friends','<div class="ring"><span>FRIEND</span><span>FRIEND</span><i></i><span>FRIEND</span><span>FRIEND</span></div>','Four copies of FRIEND circle an empty center.','The FRIENDs form a circle.',['friend circle','circle of friendship']);
+puzzle('square','Back to square one',seq('BACK','2',styled('inside square','1')),'BACK, the digit 2, and a square containing the digit 1.','Say it aloud: BACK, two, square one.',['back to square 1','back 2 square 1']);
+puzzle('corner','Around the corner','<div style="display:grid;grid-template-columns:repeat(4,.84em);text-align:center"><span>A</span><span>R</span><span>O</span><span>U</span><span style="grid-column:4">N</span><span style="grid-column:4">D</span></div>','The letters of AROUND turn a right-angle corner after the U.','You have to read around the corner to finish the word.',['round the corner','around a corner']);
+puzzle('cross','Crossroads','<div style="display:grid;grid-template-columns:repeat(5,.8em);line-height:1"><span style="grid-column:3">R</span><span style="grid-column:3">O</span><span>R</span><span>O</span><span>A</span><span>D</span><span>S</span><span style="grid-column:3">D</span><span style="grid-column:3">S</span></div>','Two copies of ROADS cross at their shared letter A.','One ROADS crosses the other.',['roads crossing','crossing roads','at a crossroads']);
+puzzle('fall','Falling asleep','<div style="display:flex">'+[...'ASLEEP'].map((c,i)=>'<span style="transform:translateY('+((i-2.5)*.28)+'em)">'+c+'</span>').join('')+'</div>','Each letter of ASLEEP falls lower than the previous one.','ASLEEP is falling down the card.',['fall asleep']);
+puzzle('snow','Snowed in',inset('SN','IN','OW'),'IN is tucked between SN and OW.','IN is surrounded by SNOW.',['in the snow','in snow']);
+puzzle('travel','Travel in style',inset('ST','TRAVEL','YLE'),'TRAVEL is inserted between ST and YLE.','TRAVEL sits inside STYLE.',['traveling in style','travelling in style']);
+puzzle('feet','Six feet under',stack('GROUND','FEET　FEET　FEET','FEET　FEET　FEET'),'Six copies of FEET sit beneath GROUND.','Count the six FEET under GROUND.',['6 feet under','six feet underground']);
+puzzle('legal','Above the law',stack('ME','——','LAW'),'ME sits above a line with LAW below it.','The speaker has put themself above the LAW.',['I am above the law',"I’m above the law"]);
+puzzle('once','Once upon a time',stack('ONCE','A TIME'),'ONCE sits directly on top of A TIME.','Read ONCE, up on A TIME.');
+puzzle('sentence','Incomplete sentence','SENTENC…','The word shown is S E N T E N C followed by an ellipsis.','SENTENCE is missing its final letter.',['unfinished sentence','an unfinished sentence']);
+puzzle('cycle','Tricycle',stack('CYCLE','CYCLE','CYCLE'),'CYCLE appears three times.','Three CYCLEs suggest the prefix tri-.',['tri cycle']);
+puzzle('veil','A blessing in disguise','<div class="borderlabel"><small>DISGUISE</small>BLESSING</div>','BLESSING appears inside an outline labeled DISGUISE.','The BLESSING is in DISGUISE.',['blessing in a disguise']);
+const demo={art:stack('HEAD','HEELS'),description:'HEAD is printed directly above HEELS.',answer:'Head over heels'};
+const bank=new Map(puzzles.map(p=>[p.id,p]));
+const title='Rebus Rush';
+const lengths=[60,120,180];
+let duration=60,game=null,invite=null,tick=null,storageKey='',lastNotice='';
+const $click=(id,f)=>{el(id).onclick=f;};
+$click('help',()=>el('rules').showModal());$click('gotit',()=>el('rules').close());
+function shuffle(values){
+ const a=values.slice();
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function normalized(text){
+ return text.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[’']/g,'').replace(/&/g,' and ').replace(/[‐‑–—-]/g,' ').trim().replace(/^(?:a|an|the)\s+/,'').replace(/[^a-z0-9]/g,'');
+}
+function matches(clue,input){const n=normalized(input);return !!n&&[clue.answer,...clue.aliases].some(a=>normalized(a)===n);}
+function freshDeck(){
+ let recent=[];
+ try{recent=JSON.parse(localStorage.getItem('rr-seen-v1'))||[];}catch{}
+ if(!Array.isArray(recent))recent=[];
+ return shuffle([...bank.keys()]).sort((a,b)=>recent.indexOf(a)-recent.indexOf(b));
+}
+function remember(id){
+ try{const old=JSON.parse(localStorage.getItem('rr-seen-v1'))||[];const recent=Array.isArray(old)?old.filter(x=>x!==id&&bank.has(x)):[];recent.push(id);localStorage.setItem('rr-seen-v1',JSON.stringify(recent));}catch{}
+}
+function save(){try{sessionStorage.setItem(storageKey,JSON.stringify(game));}catch{}}
+function validDeck(d){return Array.isArray(d)&&d.length>0&&d.length<=bank.size&&d.every(x=>bank.has(x))&&new Set(d).size===d.length;}
+function decode(token){
+ if(typeof token!=='string'||token.length>4000||!(/^[A-Za-z0-9_-]+$/).test(token))throw Error();
+ const p=JSON.parse(atob(token.replace(/-/g,'+').replace(/_/g,'/')));
+ if(p?.v!==1||!lengths.includes(p.time)||!validDeck(p.deck)||!Number.isInteger(p.score)||p.score<0||p.score>p.deck.length)throw Error();
+ return p;
+}
+function recover(){
+ try{
+  const x=JSON.parse(sessionStorage.getItem(storageKey));if(!x||!validDeck(x.deck)||!lengths.includes(x.time)||!Number.isFinite(x.end)||!['play','done'].includes(x.phase))return;
+  if(invite&&(x.time!==invite.time||JSON.stringify(x.deck)!==JSON.stringify(invite.deck)))return;
+  if(!Array.isArray(x.queue)||!Array.isArray(x.solved)||!Array.isArray(x.seen))return;
+  const combined=x.queue.concat(x.solved);
+  if(combined.length!==x.deck.length||new Set(combined).size!==combined.length||!combined.every(id=>x.deck.includes(id))||!x.seen.every(id=>x.deck.includes(id))||(!x.queue.length&&x.phase==='play'))return;
+  game=x;
+ }catch{}
+}
+function linkForGame(){
+ const token=btoa(JSON.stringify({v:1,time:game.time,deck:game.deck,score:game.solved.length})).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');const u=new URL(location.href);u.search='';u.hash='race='+token;return u.href;
+}
+function art(p){return '<div class="art" role="img" aria-label="'+p.description.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"><div aria-hidden="true">'+p.art+'</div></div>';}
+function focusHeading(){const h=main.querySelector('h1');if(h){h.tabIndex=-1;h.focus({preventScroll:true});}window.scrollTo(0,0);}
+function home(problem=false){
+ const sub=invite?'Your friend solved <strong>'+invite.score+'</strong> in '+invite.time/60+' '+(invite.time===60?'minute':'minutes')+'. Race the same puzzle deck.':'Read the picture. Find the phrase. How many can you solve before time runs out?';
+ main.innerHTML=(problem?'<p class="alert" role="alert">This challenge link is incomplete. You can still play a fresh round.</p>':'')+'<section class="hero"><div><h1>Rebus<br> <em>Rush.</em></h1><p>'+sub+'</p><div id="duration"></div><button class="play" id="start">'+(invite?'Start challenge':'Start round')+'</button></div><aside class="practice sheet"><div class="caption">Practice puzzle</div>'+art(demo)+'<div class="paperfoot" id="demofoot"><button id="show" class="plain">Reveal practice answer</button></div></aside></section>';
+ if(!invite){
+  el('duration').innerHTML='<span class="durlabel" id="timelabel">Round length</span><div class="dur" role="group" aria-labelledby="timelabel">'+lengths.map(t=>'<button aria-pressed="'+(duration===t)+'" data-sec="'+t+'">'+t/60+' min</button>').join('')+'</div>';
+  for(const b of el('duration').querySelectorAll('button'))b.onclick=()=>{duration=Number(b.dataset.sec);for(const x of el('duration').querySelectorAll('button'))x.setAttribute('aria-pressed',String(x===b));};
+ }
+ $click('show',()=>{el('demofoot').innerHTML='<p role="status"><strong>Head over heels.</strong> HEAD sits over HEELS.</p>';});
+ $click('start',()=>start());
+}
+function start(){
+ const deck=invite?invite.deck.slice():freshDeck(),time=invite?invite.time:duration;
+ game={time,deck,queue:deck.slice(),seen:[],solved:[],end:Date.now()+time*1000,phase:'play'};
+ lastNotice='';showCurrent();armClock();
+}
+function stopClock(){if(tick!==null){clearInterval(tick);tick=null;}}
+function armClock(){stopClock();if(game?.phase==='play'){updateClock();if(game.phase==='play')tick=setInterval(updateClock,150);}}
+function clockText(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function updateClock(){
+ if(game?.phase!=='play')return;
+ const s=Math.ceil((game.end-Date.now())/1000);if(s<=0){finish();return;}
+ if(el('time')){const t=el('time');const value=clockText(s);if(t.textContent!==value)t.textContent=value;t.classList.toggle('low',s<=10);}
+}
+function expired(){if(!game||game.phase!=='play')return true;if(Date.now()>=game.end){finish();return true;}return false;}
+function setNotice(message,bad=false){lastNotice=message;const n=el('notice');if(n){n.textContent=message;n.classList.toggle('bad',bad);}}
+function showCurrent(){
+ if(expired())return;
+ const id=game.queue[0],p=bank.get(id);
+ if(!game.seen.includes(id)){game.seen.push(id);remember(id);}
+ save();
+ main.innerHTML='<section class="arena"><h1 class="sr">Rebus round</h1><div class="scorebar"><span>'+game.solved.length+' solved</span><span class="timer" id="time" aria-label="Time remaining" role="timer"></span></div><div class="sheet"><div class="caption"><span>Puzzle '+(game.deck.indexOf(id)+1)+'</span><span>'+(game.time/60)+'-minute round</span></div>'+art(p)+'</div><form id="guessform"><label class="answerlabel" for="guess">What’s the phrase?</label><div class="formrow"><input id="guess" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="160" enterkeyhint="go"><button type="submit" class="check">Check</button></div></form><div class="statusrow"><span role="status" class="msg" id="notice"></span><button id="pass">Pass</button></div><button class="plain end" id="end">End round early</button></section>';
+ el('guessform').onsubmit=e=>{e.preventDefault();if(expired())return;const input=el('guess');if(!input.value.trim()){setNotice('Type a guess, or pass.',true);input.focus();return;}
+  if(!matches(p,input.value)){setNotice('Try another phrase, or pass.',true);input.focus();input.select();return;}
+  game.solved.push(game.queue.shift());lastNotice='✓ '+p.answer;
+  if(!game.queue.length)finish();else showCurrent();
+ };
+ $click('pass',()=>{if(expired())return;if(game.queue.length===1){setNotice('This is the last unsolved puzzle. Try it or end the round.');return;}
+  game.queue.push(game.queue.shift());lastNotice=game.seen.includes(game.queue[0])?'Back to a puzzle you passed.':'Passed. It will come around again.';showCurrent();
+ });
+ $click('end',()=>{if(expired())return;const d=el('enddialog');d.showModal();el('continue').focus();});
+ updateClock();if(game.phase==='play'){setNotice(lastNotice);el('guess').focus({preventScroll:true});}
+}
+function finish(){
+ if(!game)return;stopClock();const d=el('enddialog');if(d?.open)d.close();
+ game.timedOut=Date.now()>=game.end;game.phase='done';save();results();focusHeading();
+}
+function reset(){
+ stopClock();try{sessionStorage.removeItem(storageKey);}catch{}game=null;invite=null;lastNotice='';if(location.hash)history.replaceState(null,'',location.pathname+location.search);storageKey='rr-v1:solo';home();focusHeading();
+}
+function results(){
+ const score=game.solved.length,solved=new Set(game.solved),missed=game.seen.filter(x=>!solved.has(x));
+ const h=invite?(score>invite.score?'You won!':score===invite.score?'It’s a tie!':'Your friend won.'):(score===game.deck.length?'Deck cleared!':game.timedOut?'Time’s up!':'Round complete.');
+ main.innerHTML='<section class="results"><h1>'+h+'</h1><p class="score">'+score+' solved</p><p>'+game.time/60+'-minute round'+(invite?' · Your friend solved '+invite.score:'')+'</p><div class="actions"><button class="play" id="again">Play again</button><button id="challenge">Challenge a friend</button></div><div id="share"></div><section class="resultcard"><h2>Puzzle review</h2><p>Open a puzzle to see its answer and explanation.</p><div id="review"></div></section></section>';
+ for(const id of missed.concat(game.solved)){const p=bank.get(id),det=D.createElement('details');det.className='review';det.innerHTML='<summary>Puzzle '+(game.deck.indexOf(id)+1)+' <small>· '+(solved.has(id)?'Solved':'Unsolved')+'</small></summary>'+art(p)+'<p><strong>'+p.answer+'</strong></p><p>'+p.explanation+'</p>';el('review').append(det);}
+ $click('again',reset);$click('challenge',()=>{
+  el('share').innerHTML='<div class="resultcard"><h2>Race your score</h2><label for="url">Send the same puzzles and time limit to a friend.</label><input class="shareinput" id="url" readonly><button id="copy">Copy challenge link</button><span id="copied" role="status"></span></div>';
+  const u=el('url');u.value=linkForGame();u.onclick=()=>u.select();
+  $click('copy',async()=>{try{await navigator.clipboard.writeText(u.value);el('copied').textContent=' Copied!';}catch{u.focus();u.select();el('copied').textContent=' Copy the selected link.';}});
+  el('challenge').hidden=true;el('copy').focus();
+ });
+}
+function boot(){
+ stopClock();game=null;invite=null;lastNotice='';let invalid=false;
+ const token=new URLSearchParams(location.hash.slice(1)).get('race');
+ if(token!==null){try{invite=decode(token);}catch{invalid=true;}}
+ storageKey='rr-v1:'+(invite?token:'solo');if(!invalid)recover();
+ if(!game){home(invalid);return;}
+ if(game.phase==='done'){results();return;}
+ showCurrent();armClock();
+}
+</script><dialog id="enddialog"><h2>End this round?</h2><p>Your current score will be final. The timer is still running.</p><div class="actions"><button id="continue">Keep playing</button><button id="confirmend">End round</button></div></dialog>
+<script>
+$click('continue',()=>{el('enddialog').close();if(!expired())el('guess').focus();});
+$click('confirmend',finish);window.addEventListener('hashchange',boot);
+D.addEventListener('visibilitychange',()=>{if(!D.hidden)updateClock();});
+boot();
+</script></body></html>
