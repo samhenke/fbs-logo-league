@@ -5,6 +5,7 @@
 @media(max-width:700px){.wrap{width:calc(100% - 32px)}.hero{padding:30px 0;min-height:250px;grid-template-columns:1.1fr .9fr}.hero h1{font-size:clamp(3.9rem,10.5vw,5rem)}.hero p{font-size:1rem}.fan{transform:scale(.65);transform-origin:50% 50%;width:250px;justify-self:center}.options{grid-template-columns:1fr 1fr}.opt{gap:6px}.top{min-height:64px}.brand{font-size:1.36rem}.sectionhead h2{font-size:1.8rem}.foot{margin-top:4px}.controls{align-items:flex-start}.hero .twinkle{left:-12%}.bar{flex-wrap:wrap}}
 @media(max-width:460px){.hero{min-height:0;padding:26px 0 21px;display:block;position:relative}.hero h1{font-size:4.15rem;position:relative;z-index:1}.hero p{max-width:100%;font-size:1rem}.fan{position:absolute;top:-45px;right:1px;width:180px;transform:scale(.52);transform-origin:90% 50%}.twinkle{display:none}.sectionhead{align-items:baseline}.small{font-size:.85rem}.options{gap:10px}.lobby{padding-top:18px}.moves button{width:34px;height:38px}.row{gap:7px}.meta{gap:5px}.controls{flex-direction:column;gap:12px}.controls .primary{width:100%}.game{margin-top:21px}.hero h1{margin-bottom:14px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.themeReveal{border-left:4px solid var(--red);padding:8px 14px;background:#f3ebda;margin:12px 0 20px;line-height:1.5}
 </style></head><body>
 <header class="top wrap"><div class="brand"><span class="logo" aria-hidden="true"></span>Pecking Order</div><button class="help" id="help"><span class="q" aria-hidden="true">?</span>How to play</button></header>
 <main class="wrap" id="main"></main><dialog id="rules"><h2>How to play</h2><ol><li>Choose a deck. Each game has three rounds of four cards.</li><li>Move the cards into ascending order using the up and down buttons, or drag them into place.</li><li>Lock in your order. Every pair you placed in the right order earns a point, for up to six per round.</li><li>Send your challenge link to a friend. They get the same cards and starting order, with your score to beat.</li></ol><button class="primary" id="close">Got it</button></dialog><div id="live" class="sr" role="status"></div>
@@ -13,7 +14,7 @@
 'use strict';
 const decks = {
  mixed:{name:'Mixed bag',symbol:'✳',hint:'A little of everything'},
- timeline:{name:'Timeline',symbol:'◷',hint:'Earliest to latest',title:'Which came first?',basis:'Order these events from earliest to latest.'},
+ timeline:{name:'Timeline',symbol:'◷',hint:'Four connected events',title:'Which came first?',basis:'Order these events from earliest to latest.'},
  population:{name:'Population',symbol:'♟',hint:'Smallest to largest',title:'Which city is smaller?',basis:'Rank cities by residents within city limits, fewest first. U.S. Census estimates for July 1, 2024.'},
  prices:{name:'Price tags',symbol:'$',hint:'Cheapest to priciest',title:'What cost the least?',basis:'Rank these packages by average U.S. price, cheapest first. Farm Bureau Thanksgiving survey, 2024.'}
 };
@@ -28,7 +29,7 @@ const bank={
  ['Nintendo starts making playing cards',1889,'Nintendo began as a maker of hanafuda cards in Kyoto.','https://www.nintendo.co.jp/corporate/en/history/index.html'],
  ['Bram Stoker publishes Dracula',1897,'The first edition appeared in London eight years after Nintendo began.','https://www.themorgan.org/printed-books/365289'],
  ['Apollo 11 lands on the Moon',1969,'Neil Armstrong and Buzz Aldrin landed on July 20.','https://science.nasa.gov/moon/missions/'],
- ['The original Star Wars opens in the U.S.',1977,'The movie opened on May 25.','https://www.starwars.com/films/star-wars-episode-iv-a-new-hope'],
+ ['The original Star Wars opens in the U.S.',1977,'The movie opened on May 25.','https://www.starwars.com/films/star-wars-episode-iv-a-new-hope',525],
  ['Ciabatta gets its modern recipe',1982,'Italian miller Arnaldo Cavallari developed the loaf from regional breads.','https://www.theguardian.com/theguardian/1999/apr/30/features11.g24'],
  ['The Statue of Liberty is dedicated',1886,'The dedication in New York Harbor took place on October 28.','https://home.nps.gov/stli/learn/statue-of-liberty-facts.htm'],
  ['The Big Mac goes nationwide in the U.S.',1968,'The national rollout came a year before the Moon landing.','https://corporate.mcdonalds.com/corpmcd/our-stories/article/big-mac-burger-day.html'],
@@ -37,11 +38,77 @@ const bank={
  ['The Great Pyramid of Giza is built',-2560,'Builders constructed the pyramid for Pharaoh Khufu.','https://egymonuments.gov.eg/archaeological-sites/giza-plateau/'],
  ['The last woolly mammoths die out',-2000,'The last known population lived on Wrangel Island off Siberia.','https://www.helsinki.fi/en/luomus/news/last-mammoths-died-remote-island'],
  ['A pilot invents the Rollaboard suitcase',1987,'Robert Plath put two wheels and an extendable handle on an upright suitcase.','https://eu.travelpro.com/pages/our-history'],
- ['Apple introduces the iPod shuffle',2005,'The original player weighed less than an ounce.','https://www.apple.com/newsroom/2005/01/11Apple-Introduces-iPod-shuffle/']
+ ['Apple introduces the iPod shuffle',2005,'The original player weighed less than an ounce.','https://www.apple.com/newsroom/2005/01/11Apple-Introduces-iPod-shuffle/'],
+ ["A Boston cooking magazine prints a PB&J recipe", 1901, "Julia Davis Chandler suggested a layer of jelly with the peanut butter.", "https://apnews.com/article/bd68e6a150a9d50cc7567fbf04fe80ec"],
+ ["The Twinkie debuts", 1930, "James Dewar came up with the sponge cake.", "https://www.hostesscakes.com/our-story"],
+ ["The sandwich shop that becomes Subway opens", 1965, "Fred DeLuca and Peter Buck opened Pete’s Super Submarines in Bridgeport, Connecticut.", "https://www.subway.com/en-us/aboutus/history"],
+ ["McDonald’s introduces the McRib", 1981, "The barbecue pork sandwich debuted the year before Cavallari’s ciabatta.", "https://corporate.mcdonalds.com/corpmcd/our-stories/article/mcrib-back-usa.html"],
+ ["Bicycle brand playing cards go on sale", 1885, "Bicycle was a playing-card brand before Nintendo opened in Kyoto.", "https://usplayingcard.com/wp-content/uploads/2019/10/USPC_Casino_Catalog_2019_Web.pdf"],
+ ["The Ouija board receives a U.S. patent", 1891, "Elijah Bond’s patent describes a board for answering players’ questions.", "https://patents.google.com/patent/US446054A/en"],
+ ["Lizzie Magie patents The Landlord’s Game", 1904, "The game let players buy property and collect rent.", "https://en.wikisource.org/wiki/United_States_patent_748626"],
+ ["Space shuttle Enterprise makes its first free flight", 1977, "A Boeing 747 carried Enterprise aloft and released it for a glide to Earth.", "https://www.nasa.gov/wp-content/uploads/2023/04/1977.pdf", 812],
+ ["Voyager 2 launches", 1977, "It was the first of the two Voyager spacecraft to leave Earth.", "https://www.nasa.gov/news-release/pioneering-nasa-spacecraft-mark-thirty-years-of-flight/", 820],
+ ["Voyager 1 launches", 1977, "Its launch followed Voyager 2’s by sixteen days.", "https://www.nasa.gov/news-release/pioneering-nasa-spacecraft-mark-thirty-years-of-flight/", 905],
+ ["Tug-of-war teams compete at the Paris Olympics", 1900, "A Danish-Swedish team met the French team in Paris.", "https://www.olympedia.org/results/21100"],
+ ["Figure skating makes its Olympic debut", 1908, "The skaters competed at the Summer Games in London.", "https://www.olympics.com/ioc/news/figure-skating"],
+ ["Olympic medals are first awarded for art", 1912, "Stockholm held competitions in five arts, including architecture and music.", "https://www.olympics.com/ioc/news/a-meeting-of-muscles-and-minds"],
+ ["The first Winter Olympics take place", 1924, "Chamonix hosted what was then called International Winter Sports Week.", "https://www.olympics.com/ioc/faq/history-and-origin-of-the-games/when-were-the-first-olympic-winter-games-held"],
+ ["Boston and Pittsburgh play the first modern World Series", 1903, "The first game was played in Boston.", "https://www.mlb.com/postseason/history/1903"],
+ ["“Take Me Out to the Ball Game” is written", 1908, "The songwriters said they had never seen a major-league game.", "https://baseballhall.org/discover/baseballs-anthem-began-as-tin-pan-alley-hit"],
+ ["Cracker Jack starts putting a prize in every box", 1912, "The promotion followed the snack’s shout-out in the baseball song.", "https://www.cbsnews.com/news/almanac-cracker-jack/"],
+ ["The ballpark now called Wrigley Field hosts its first game", 1914, "The home team was the Chicago Federals.", "https://www.mlb.com/cubs/guide/wrigley-field-renovations-history"],
+ ["Zenith introduces its Lazy Bones TV remote", 1950, "The remote connected to the television by a wire.", "https://zenith.com/heritage/zenith-firsts/"],
+ ["I Love Lucy premieres on CBS", 1951, "Lucille Ball’s sitcom made its debut on a Monday evening.", "https://www.loc.gov/exhibits/i-love-lucy/overview.html"],
+ ["NBC airs the Rose Parade coast to coast in color", 1954, "NBC broadcast the New Year’s Day parade from Pasadena.", "https://www.guinnessworldrecords.com/world-records/first-coast-to-coast-colour-transmission-usa-"],
+ ["Kennedy and Nixon face off in a televised debate", 1960, "Their first debate aired on September 26.", "https://www.jfklibrary.org/sites/default/files/2018-06/Candidates_Take_a_Stand.pdf"],
+ ["Ray Tomlinson sends email between networked computers", 1971, "His message traveled over ARPANET.", "https://archive.computerhistory.org/resources/access/text/2022/08/102806104-05-01-acc.pdf"],
+ ["A computer salesman sends a mass email advertisement", 1978, "Gary Thuerk used ARPANET to invite people to product demonstrations.", "https://www.computerhistory.org/tdih/May/03/"],
+ ["A Carnegie Mellon researcher proposes :-) to flag jokes", 1982, "Scott Fahlman made the suggestion on an electronic bulletin board.", "https://lti.cs.cmu.edu/about-lti/history.html"],
+ ["Tim Berners-Lee submits his proposal for the Web", 1989, "He wrote the proposal at CERN in March.", "https://home.cern/science/computing/the-birth-of-the-web/short-history-web/"],
+ ["A French inventor records someone singing “Au clair de la lune”", 1860, "Édouard-Léon Scott de Martinville’s machine traced the vibrations of a voice.", "https://www.loc.gov/static/programs/national-recording-preservation-board/documents/phonautograms.pdf"],
+ ["Alexander Graham Bell receives his telephone patent", 1876, "The U.S. patent was granted on March 7.", "https://www.archives.gov/files/historical-docs/doc-content/images/a-g-bell-telegraphy-patent.pdf"],
+ ["Edison invents a phonograph that can play a voice back", 1877, "His team at Menlo Park built the machine.", "https://www.nps.gov/edis/learn/kidsyouth/the-phonograph.htm"],
+ ["Emile Berliner receives a U.S. gramophone patent", 1887, "The patent was issued on November 8.", "https://www.loc.gov/item/berl0124/"],
+ ["Macy’s holds its first parade on Thanksgiving Day", 1924, "The parade went through Manhattan to the Herald Square store.", "https://www.macysinc.com/company/about/"],
+ ["The Detroit Lions host their first Thanksgiving game", 1934, "Their opponents were the Chicago Bears.", "https://www.detroitlions.com/news/bears-at-lions-how-to-watch-listen-and-follow"],
+ ["Federal law fixes Thanksgiving on November’s fourth Thursday", 1941, "President Franklin Roosevelt signed the resolution.", "https://www.archives.gov/press/press-releases/2017/nr17-13"],
+ ["Campbell’s test kitchen creates green bean casserole", 1955, "Dorcas Reilly developed the recipe in Camden, New Jersey.", "https://www.campbells.com/comfort-corner/story-of-campbells-iconic-green-bean-casserole/"]
  ],
  population:[['New York City',8478072,'New York'],['Los Angeles',3878704,'California'],['Chicago',2721308,'Illinois'],['Houston',2390125,'Texas'],['Phoenix',1673164,'Arizona'],['Philadelphia',1573916,'Pennsylvania'],['San Antonio',1526656,'Texas'],['San Diego',1404452,'California'],['Dallas',1326087,'Texas'],['Jacksonville',1009833,'Florida'],['Fort Worth',1008106,'Texas'],['San Jose',997368,'California'],['Austin',993588,'Texas'],['Charlotte',943476,'North Carolina'],['Columbus',933263,'Ohio']],
  prices:[['Whole turkey',25.67,'16 lb'],['Pumpkin pie mix',4.15,'30 oz'],['Whole milk',3.21,'1 gallon'],['Carrots and celery',0.84,'1 lb combined'],['Dinner rolls',4.16,'1 dozen'],['Pie shells',3.40,'2 shells'],['Green peas',1.73,'1 lb'],['Fresh cranberries',2.35,'12 oz'],['Whipping cream',1.81,'½ pint'],['Sweet potatoes',2.93,'3 lb'],['Cubed stuffing',4.08,'14 oz'],['Boneless ham',14.79,'4 lb'],['Russet potatoes',2.63,'5 lb'],['Green beans',1.83,'1 lb']]
 };
+// Timeline card positions are permanent. An optional fifth field is the month and day (MMDD).
+const timelineSets=[
+ {"title": "Pack a lunch", "cards": [16, 1, 2, 17], "reveal": "A printed PB&J recipe and the Oreo both predate machine-sliced bread. Once a bakery finally sold sliced loaves, the Twinkie was only two years behind."},
+ {"title": "At the sandwich counter", "cards": [18, 9, 19, 7], "reveal": "Ciabatta sounds like the oldest thing on this menu. In fact, you could already order a McRib when an Italian miller developed the modern loaf."},
+ {"title": "An evening at the game table", "cards": [20, 3, 21, 22], "reveal": "Only four years separate the first Bicycle deck and the start of Nintendo. Both were selling cards before anyone held a U.S. patent for the Ouija board."},
+ {"title": "The year Star Wars opened", "cards": [6, 23, 24, 25], "reveal": "Audiences had already seen Star Wars by the time Enterprise glided free of its carrier plane. Back on the launchpad, Voyager 2 left Earth sixteen days before Voyager 1."},
+ {"title": "What belongs at the Olympics?", "cards": [26, 27, 28, 29], "reveal": "Figure skaters were winning Olympic medals sixteen years before the first Winter Games. The Summer Games even found room for painters and sculptors in between."},
+ {"title": "Buy me some peanuts…", "cards": [30, 31, 32, 33], "reveal": "The song was already asking fans to buy Cracker Jack four years before the snack promised a prize in every box. Wrigley Field hadn’t hosted a game yet."},
+ {"title": "From the living-room couch", "cards": [34, 35, 36, 37], "reveal": "You could change channels by remote before you could tune in to I Love Lucy. The awkward part was the cord stretching from your couch to the set."},
+ {"title": "Life online", "cards": [38, 39, 40, 41], "reveal": "Spam beat the proposal for the World Wide Web by eleven years. By then, people had already figured out how to tell a joke online and mark it with a sideways smile."},
+ {"title": "Saving a human voice", "cards": [42, 43, 44, 45], "reveal": "A French inventor recorded someone singing seventeen years before Edison’s phonograph. His machine drew the sound on a surface. It took until 2008 for researchers to play the recording back."},
+ {"title": "An American Thanksgiving", "cards": [46, 47, 48, 49], "reveal": "Macy’s had a parade and Detroit had a football game before federal law settled on the fourth Thursday. The green bean casserole came last, more than twenty years after the Lions took the field."}
+];
+function timelineSet(round){
+ if(round.t!=='timeline')return;
+ return timelineSets.find(set=>set.cards.every(id=>round.a.includes(id)));
+}
+function pickTimelineSets(count){
+ const key='pecking-order:timeline-history';
+ let history=[];
+ try{const saved=JSON.parse(localStorage.getItem(key));if(Array.isArray(saved))history=saved;}catch{}
+ // Cycle through unseen sets first. Previously seen sets return least-recently played first.
+ const ordered=shuffle(timelineSets).sort((a,b)=>history.indexOf(a.title)-history.indexOf(b.title));
+ const picked=ordered.slice(0,count);
+ const titles=ordered.slice(count).filter(s=>history.includes(s.title)).concat(picked).map(s=>s.title);
+ try{localStorage.setItem(key,JSON.stringify(titles));}catch{}
+ return picked;
+}
+function value(type,id){
+ const card=bank[type][id];
+ return type==='timeline'?card[1]*10000+(card[4]||0):card[1];
+}
 const main=document.querySelector('#main');
 const fullPage='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
 const get=id=>document.getElementById(id);
@@ -57,14 +124,20 @@ function shuffle(values){
 }
 function points(type,order){
  let sum=0;
- for(let i=0;i<order.length;i++)for(let j=i+1;j<order.length;j++)if(bank[type][order[i]][1]<bank[type][order[j]][1])sum++;
+ for(let i=0;i<order.length;i++)for(let j=i+1;j<order.length;j++)if(value(type,order[i])<value(type,order[j]))sum++;
  return sum;
 }
 function deal(deck){
- const pool=Object.fromEntries(Object.keys(bank).map(k=>[k,shuffle(bank[k].map((_,i)=>i))]));
  const types=deck==='mixed'?['timeline',...shuffle(['population','prices'])]:Array(3).fill(deck);
+ const sets=types.includes('timeline')?pickTimelineSets(types.filter(t=>t==='timeline').length):[];
+ const pool={};
  return types.map(t=>{
-   const a=pool[t].splice(0,4);
+   let a;
+   if(t==='timeline')a=shuffle(sets.shift().cards);
+   else{
+    pool[t]??=shuffle(bank[t].map((_,i)=>i));
+    a=pool[t].splice(0,4);
+   }
    if(points(t,a)===6)[a[0],a[1]]=[a[1],a[0]];
    return {t,a};
  });
@@ -106,7 +179,12 @@ function invite(){
 function start(rounds){game={rounds,n:0,order:[...rounds[0].a],answers:[],stage:'play'};persist();render();focusTitle();}
 function reset(){clearSaved();game=null;incoming=null;if(location.hash)history.replaceState(null,'',location.pathname+location.search);storageKey='pecking-v1:solo';home();focusTitle();}
 function total(){return game.answers.reduce((s,a,i)=>s+points(game.rounds[i].t,a),0);}
-function fmt(t,v){return t==='prices'?'$'+v.toFixed(2):t==='population'?v.toLocaleString('en-US'):v<0?'c. '+(-v).toLocaleString('en-US')+' BCE':String(v);}
+function fmt(t,v,monthDay){
+ if(t==='timeline'&&monthDay){
+  const date=new Date(Date.UTC(v,Math.floor(monthDay/100)-1,monthDay%100));
+  return date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
+ }
+ return t==='prices'?'$'+v.toFixed(2):t==='population'?v.toLocaleString('en-US'):v<0?'c. '+(-v).toLocaleString('en-US')+' BCE':String(v);}
 function reorder(from,to,focusDirection){
  if(game.stage!=='play'||!Number.isInteger(from)||from<0||from>3||to<0||to>3||from===to)return;
  const moved=game.order.splice(from,1)[0];game.order.splice(to,0,moved);persist();render();
@@ -116,11 +194,11 @@ function reorder(from,to,focusDirection){
 function rows(round,order,reveal=false,guess=[]){
  const ul=document.createElement('ol');ul.className='list';
  order.forEach((id,i)=>{
-  const [label,val,detail,source]=bank[round.t][id],li=document.createElement('li');li.className='row';
+  const [label,val,detail,source,monthDay]=bank[round.t][id],li=document.createElement('li');li.className='row';
   li.innerHTML='<b class="num" aria-hidden="true">'+(i+1)+'</b><div class="info"></div>';const info=li.querySelector('.info');info.textContent=label;
   if(round.t!=='timeline'||reveal){const d=document.createElement('small');d.textContent=detail;info.append(d);}
   if(reveal){
-   const v=document.createElement('div');v.className='actual';v.textContent=fmt(round.t,val);li.append(v);
+   const v=document.createElement('div');v.className='actual';v.textContent=fmt(round.t,val,monthDay);li.append(v);
    const d=document.createElement('small');d.textContent='Your rank: '+(guess.indexOf(id)+1);info.append(d);
    if(source){const a=document.createElement('a');a.href=source;a.target='_blank';a.rel='noopener';a.className='source';a.textContent='Source';a.setAttribute('aria-label','Source for '+label);info.append(a);}
   }else{
@@ -136,13 +214,18 @@ function rows(round,order,reveal=false,guess=[]){
  });return ul;
 }
 function sourceLine(t){return t==='timeline'?'':'<p class="source">Figures from the <a target="_blank" rel="noopener" href="'+(t==='prices'?priceSource:popSource)+'">'+(t==='prices'?'2024 Farm Bureau Thanksgiving survey':'U.S. Census Bureau, Vintage 2024')+'</a>.</p>';}
-function correct(round){return [...round.a].sort((a,b)=>bank[round.t][a][1]-bank[round.t][b][1]);}
+function revealNote(theme){
+ const p=document.createElement('p');p.className='themeReveal';p.textContent=theme.reveal;return p;
+}
+function correct(round){return [...round.a].sort((a,b)=>value(round.t,a)-value(round.t,b));}
 function render(){
  if(game.stage==='done'){finish();return;}
  const r=game.rounds[game.n],d=decks[r.t],review=game.stage==='review';
- main.innerHTML='<section class="game"><div class="meta"><span>'+d.name+' · Round '+(game.n+1)+' of 3</span><span class="points">'+total()+' / 18 points</span></div><div class="progress" aria-hidden="true">'+game.rounds.map((_,i)=>'<i class="'+(i<=game.n?'on':'')+'"></i>').join('')+'</div><h1 class="gameTitle">'+(review?(points(r.t,game.order)===6?'Perfect order!':'The correct order'):d.title)+'</h1><p class="directions"></p><div id="cards"></div><div id="basis"></div><div class="bar"><button class="primary" id="next"></button><span class="small" id="side"></span></div></section>';
+ const theme=timelineSet(r);
+ main.innerHTML='<section class="game"><div class="meta"><span>'+d.name+' · Round '+(game.n+1)+' of 3</span><span class="points">'+total()+' / 18 points</span></div><div class="progress" aria-hidden="true">'+game.rounds.map((_,i)=>'<i class="'+(i<=game.n?'on':'')+'"></i>').join('')+'</div><h1 class="gameTitle">'+(review?(points(r.t,game.order)===6?'Perfect order!':'The correct order'):(theme?.title??d.title))+'</h1><p class="directions"></p><div id="cards"></div><div id="basis"></div><div class="bar"><button class="primary" id="next"></button><span class="small" id="side"></span></div></section>';
  main.querySelector('.directions').textContent=review?'You got '+points(r.t,game.order)+' of 6 pairs right.':d.basis;
  get('cards').append(rows(r,review?correct(r):game.order,review,game.order));get('basis').innerHTML=review?sourceLine(r.t):'';
+ if(review&&theme)get('basis').append(revealNote(theme));
  get('side').textContent=review?(incoming?'Your friend scored '+incoming.s+' / 18 overall.':''):'Drag cards or use the ↑ and ↓ buttons.';
  get('next').textContent=review?(game.n===2?'See final score':'Next round'):'Lock in my order';
  get('next').onclick=()=>{
@@ -168,8 +251,8 @@ function finish(){
  const link=get('link');link.value=shareLink();link.onclick=()=>link.select();if(!link.value){link.hidden=true;get('copy').hidden=true;main.querySelector('label[for=link]').hidden=true;get('message').textContent='Send the downloaded game file to share this offline challenge.';}
  get('copy').onclick=async()=>{try{await navigator.clipboard.writeText(link.value);get('message').textContent='Copied. Send the link to your friend.';}catch{link.focus();link.select();get('message').textContent='Copy the selected link to send it to your friend.';}};
  get('file').onclick=fileInvite;get('again').onclick=reset;
- game.rounds.forEach((r,i)=>{const det=document.createElement('details');det.className='reviews';det.innerHTML='<summary>Round '+(i+1)+' · '+decks[r.t].name+' · '+points(r.t,game.answers[i])+'/6</summary>';
- det.append(rows(r,correct(r),true,game.answers[i]));det.insertAdjacentHTML('beforeend',sourceLine(r.t));get('recap').append(det);});
+ game.rounds.forEach((r,i)=>{const det=document.createElement('details');det.className='reviews';const theme=timelineSet(r);det.innerHTML='<summary>Round '+(i+1)+' · '+(theme?.title??decks[r.t].name)+' · '+points(r.t,game.answers[i])+'/6</summary>';
+ if(theme)det.append(revealNote(theme));det.append(rows(r,correct(r),true,game.answers[i]));det.insertAdjacentHTML('beforeend',sourceLine(r.t));get('recap').append(det);});
 }
 function boot(){
  incoming=null;game=null;
